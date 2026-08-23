@@ -1,0 +1,7 @@
+nfs:
+  server: 192.168.15.9
+  path: /volume1/k8s
+
+storageClass:
+  name: synology-nfs
+  defaultClass: true
