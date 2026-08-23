@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nfs-storage
+  namespace: argocd
+
+spec:
+  project: default
+
+  sources:
+    - repoURL: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+      chart: nfs-subdir-external-provisioner
+      targetRevision: 4.0.18
+      helm:
+        releaseName: nfs-storage
+        valueFiles:
+          - $values/platform/nfs-storage/values.yaml
+
+    - repoURL: git@github.com:Fraga90/homelab-gitops.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: nfs-storage
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
